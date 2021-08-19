@@ -5,7 +5,7 @@ services:
     ports:
       - 3000:8080
     volumes:
-      - ./:/usr/share/nginx/html/user_service/
+      - ./:/usr/share/nginx/html/users/
     environment:
       SWAGGER_JSON: ./swagger.json
   pgdb:

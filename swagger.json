@@ -7,5 +7,709 @@
     "contact": {
       "email": "ali.hamrani80@gmail.com"
     }
+  },
+  "host": "api.bitok.com",
+  "basePath": "/user/v1",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "users",
+      "description": "user service api"
+    },
+    {
+      "name": "profile",
+      "description": "api for managing user profiles"
+    },
+    {
+      "name": "levels",
+      "description": "api for managing level and user levels"
+    },
+    {
+      "name": "role-permission",
+      "description": "api for managing user role and permissions"
+    }
+  ],
+  "paths": {
+    "/users/": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "create new user",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User object that needs to be sent to the user service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'add:users' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "get users",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "offset",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {
+                  "usersCount": 1000,
+                  "users": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'read:users' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/": {
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "delete user by id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "type": "integer",
+            "in": "path",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "400": {
+            "description": "invalid ID",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'delete:users' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "404": {
+            "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "update user by id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User object that needs to be sent to the user service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'update:users' permission or owner of account",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "get user by id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "404": {
+            "description": "user not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    },
+    "/users/register/": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "register new user",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User object that needs to be sent to the user service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "bad request - example of occur is when user didn't verified his phone",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'add:users' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {
+                  "token": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login/": {
+      "post": {
+        "summary": "user login endpoint",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {
+                  "token": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "user not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    },
+    "/users/byToken/{token}": {
+      "get": {
+        "summary": "get user by token",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "404": {
+            "description": "user not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    },
+    "/users/byUsername/{username}": {
+      "get": {
+        "summary": "get user by username",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "404": {
+            "description": "user not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    },
+    "/users/sendCode": {
+      "post": {
+        "summary": "send verification code to user",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "enum": ["REGISTER", "FORGET_PASSWORD", "OTHER"],
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            },
+            "400": {
+              "description": "bad request",
+              "schema": {
+                "$ref": "#/definitions/RestResp"
+              }
+            },
+            "200": {
+              "description": "success",
+              "schema": {
+                "example": {
+                  "message": "string",
+                  "error": false,
+                  "status": 200,
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/verify/": {
+      "post": {
+        "summary": "verify phone by verification code",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "enum": ["REGISTER", "FORGET_PASSWORD", "OTHER"],
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            },
+            "400": {
+              "description": "bad request",
+              "schema": {
+                "$ref": "#/definitions/RestResp"
+              }
+            },
+            "404": {
+              "description": "code not found",
+              "schema": {
+                "$ref": "#/definitions/RestResp"
+              }
+            },
+            "200": {
+              "description": "success",
+              "schema": {
+                "example": {
+                  "message": "string",
+                  "error": false,
+                  "status": 200,
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/resetPassword" : {
+      "post": {
+        "summary": "reset password",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "phone",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            },
+            "400": {
+              "description": "bad request",
+              "schema": {
+                "$ref": "#/definitions/RestResp"
+              }
+            },
+            "404": {
+              "description": "not found",
+              "schema": {
+                "$ref": "#/definitions/RestResp"
+              }
+            },
+            "200": {
+              "description": "success",
+              "schema": {
+                "example": {
+                  "message": "string",
+                  "error": false,
+                  "status": 200,
+                  "data": {}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/levels/": {},
+    "/levels/{id}": {},
+    "/roles/": {},
+    "/roles/{id}": {},
+    "/permissions/": {},
+    "/permissions/{id}": {},
+    "securityDefinitions": {
+      "token": {
+        "type": "apiKey",
+        "name": "token",
+        "in": "header"
+      }
+    },
+    "definitions": {
+      "RestResp": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "description": "http status code"
+          },
+          "error": {
+            "type": "boolean",
+            "description": "check that operation state is success or not "
+          },
+          "data": {
+            "type": "object",
+            "description": "when error is true, data object is empty object "
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "phone",
+          "email",
+          "username",
+          "firstName",
+          "lastName",
+          "personnelNum",
+          "password"
+        ],
+        "properties": {
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "personnelNum": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "password": {
+            "type": "string"
+          },
+          "levelID": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "blocked": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "Role" : {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Permission" : {
+        "type": "object",
+        "required": [
+          "title",
+          "symbol"
+        ],
+        "properties": {
+          "title" : {
+            "type" : "string"
+          },
+          "symbol" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
   }
 }
