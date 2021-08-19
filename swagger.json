@@ -20,16 +20,16 @@
       "description": "user service api"
     },
     {
-      "name": "profile",
-      "description": "api for managing user profiles"
-    },
-    {
       "name": "levels",
       "description": "api for managing level and user levels"
     },
     {
-      "name": "role-permission",
-      "description": "api for managing user role and permissions"
+      "name": "roles",
+      "description": "api for managing roles"
+    },
+    {
+      "name": "permissions",
+      "description": "api for managing permissions"
     }
   ],
   "paths": {
@@ -124,7 +124,7 @@
             }
           },
           "401": {
-            "description": "unauthorized - only user with 'read:users' permission",
+            "description": "unauthorized - only user with 'findAll:users' permission",
             "schema": {
               "$ref": "#/definitions/RestResp"
             }
@@ -233,6 +233,9 @@
         }
       },
       "get": {
+        "tags": [
+          "users"
+        ],
         "summary": "get user by id",
         "description": "",
         "parameters": [
@@ -319,6 +322,9 @@
     },
     "/users/login/": {
       "post": {
+        "tags": [
+          "users"
+        ],
         "summary": "user login endpoint",
         "description": "",
         "consumes": [
@@ -364,6 +370,9 @@
     },
     "/users/byToken/{token}": {
       "get": {
+        "tags": [
+          "users"
+        ],
         "summary": "get user by token",
         "description": "",
         "consumes": [
@@ -403,6 +412,9 @@
     },
     "/users/byUsername/{username}": {
       "get": {
+        "tags": [
+          "users"
+        ],
         "summary": "get user by username",
         "description": "",
         "consumes": [
@@ -440,8 +452,11 @@
         }
       }
     },
-    "/users/sendCode": {
+    "/users/sendCode/": {
       "post": {
+        "tags": [
+          "users"
+        ],
         "summary": "send verification code to user",
         "description": "",
         "consumes": [
@@ -453,7 +468,11 @@
         "parameters": [
           {
             "name": "type",
-            "enum": ["REGISTER", "FORGET_PASSWORD", "OTHER"],
+            "enum": [
+              "REGISTER",
+              "FORGET_PASSWORD",
+              "OTHER"
+            ],
             "in": "query",
             "type": "string"
           },
@@ -492,6 +511,9 @@
     },
     "/users/verify/": {
       "post": {
+        "tags": [
+          "users"
+        ],
         "summary": "verify phone by verification code",
         "description": "",
         "consumes": [
@@ -503,7 +525,11 @@
         "parameters": [
           {
             "name": "type",
-            "enum": ["REGISTER", "FORGET_PASSWORD", "OTHER"],
+            "enum": [
+              "REGISTER",
+              "FORGET_PASSWORD",
+              "OTHER"
+            ],
             "in": "query",
             "type": "string"
           },
@@ -551,8 +577,11 @@
         }
       }
     },
-    "/users/resetPassword" : {
+    "/users/resetPassword/": {
       "post": {
+        "tags": [
+          "users"
+        ],
         "summary": "reset password",
         "description": "",
         "consumes": [
@@ -606,108 +635,841 @@
         }
       }
     },
-    "/levels/": {},
-    "/levels/{id}": {},
-    "/roles/": {},
-    "/roles/{id}": {},
-    "/permissions/": {},
-    "/permissions/{id}": {},
-    "securityDefinitions": {
-      "token": {
-        "type": "apiKey",
-        "name": "token",
-        "in": "header"
+    "/users/tickRequest/": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "request for authentication in order to obtain colored tick"
       }
     },
-    "definitions": {
-      "RestResp": {
-        "type": "object",
-        "properties": {
-          "message": {
-            "type": "string"
+    "/users/{username}/profile": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "create or update user profile"
+      },
+      "get" : {
+        "tags": [
+          "users"
+        ],
+        "summary": "find user by username"
+      }
+    },
+    "/levels/": {
+      "post": {
+        "tags": [
+          "levels"
+        ],
+        "summary": "create new level",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User object that needs to be sent to the user service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Level"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
           },
-          "status": {
-            "type": "integer",
-            "description": "http status code"
+          "401": {
+            "description": "unauthorized - only user with 'add:levels' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
           },
-          "error": {
-            "type": "boolean",
-            "description": "check that operation state is success or not "
-          },
-          "data": {
-            "type": "object",
-            "description": "when error is true, data object is empty object "
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
           }
         }
       },
-      "User": {
-        "type": "object",
-        "required": [
-          "phone",
-          "email",
-          "username",
-          "firstName",
-          "lastName",
-          "personnelNum",
-          "password"
+      "get": {
+        "tags": [
+          "levels"
         ],
-        "properties": {
-          "phone": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "personnelNum": {
+        "summary": "get users",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "path",
             "type": "integer",
             "format": "int64"
           },
-          "password": {
-            "type": "string"
+          {
+            "name": "offset",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {
+                  "levelCount": 1000,
+                  "levels": {}
+                }
+              }
+            }
           },
-          "levelID": {
+          "401": {
+            "description": "unauthorized - only user with 'findAll:levels' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    },
+    "/levels/{id}/": {
+      "delete": {
+        "tags": [
+          "levels"
+        ],
+        "summary": "delete level by id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "type": "integer",
+            "in": "path",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "400": {
+            "description": "invalid ID",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'delete:levels' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "404": {
+            "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "levels"
+        ],
+        "summary": "update level by id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Level object that needs to be sent to the user service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Level"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'update:levels' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "levels"
+        ],
+        "summary": "find level",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "404": {
+            "description": "level not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    },
+    "/roles/": {
+      "post": {
+        "tags": [
+          "roles"
+        ],
+        "summary": "create new role",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User object that needs to be sent to the user service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Level"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'add:roles' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "roles"
+        ],
+        "summary": "get users",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "path",
             "type": "integer",
             "format": "int64"
           },
-          "blocked": {
-            "type": "boolean",
-            "default": false
+          {
+            "name": "offset",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
           }
-        }
-      },
-      "Role" : {
-        "type": "object",
-        "required": [
-          "title"
         ],
-        "properties": {
-          "title" : {
-            "type" : "string"
-          }
-        }
-      },
-      "Permission" : {
-        "type": "object",
-        "required": [
-          "title",
-          "symbol"
-        ],
-        "properties": {
-          "title" : {
-            "type" : "string"
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {
+                  "roleCount": 1000,
+                  "roles": {}
+                }
+              }
+            }
           },
-          "symbol" : {
-            "type" : "string"
+          "401": {
+            "description": "unauthorized - only user with 'findAll:roles' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
           }
+        }
+      }
+    },
+    "/roles/{id}/": {
+      "delete": {
+        "tags": [
+          "roles"
+        ],
+        "summary": "delete role by id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "type": "integer",
+            "in": "path",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "400": {
+            "description": "invalid ID",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'delete:roles' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "404": {
+            "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "roles"
+        ],
+        "summary": "update role by id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Level object that needs to be sent to the user service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Level"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'update:roles' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "roles"
+        ],
+        "summary": "find role",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "404": {
+            "description": "role not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    },
+    "/permissions/": {
+      "post": {
+        "tags": [
+          "permissions"
+        ],
+        "summary": "create new permission",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User object that needs to be sent to the user service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Level"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'add:permissions' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "permissions"
+        ],
+        "summary": "get users",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "offset",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {
+                  "permissionCount": 1000,
+                  "permissions": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'findAll:permissions' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    },
+    "/permissions/{id}/": {
+      "delete": {
+        "tags": [
+          "permissions"
+        ],
+        "summary": "delete permission by id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "type": "integer",
+            "in": "path",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "400": {
+            "description": "invalid ID",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'delete:permissions' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "404": {
+            "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "permissions"
+        ],
+        "summary": "update permission by id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Level object that needs to be sent to the user service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Level"
+            }
+          }
+        ],
+        "responses": {
+          "405": {
+            "description": "invalid input",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized - only user with 'update:permissions' permission",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "permissions"
+        ],
+        "summary": "find permission",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
+              }
+            }
+          },
+          "404": {
+            "description": "permission not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "token": {
+      "type": "apiKey",
+      "name": "token",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "RestResp": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer",
+          "description": "http status code"
+        },
+        "error": {
+          "type": "boolean",
+          "description": "check that operation state is success or not "
+        },
+        "data": {
+          "type": "object",
+          "description": "when error is true, data object is empty object "
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "required": [
+        "phone",
+        "email",
+        "username",
+        "firstName",
+        "lastName",
+        "personnelNum",
+        "password"
+      ],
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "personnelNum": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "password": {
+          "type": "string"
+        },
+        "levelID": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "blocked": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "Role": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "Permission": {
+      "type": "object",
+      "required": [
+        "title",
+        "symbol"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "symbol": {
+          "type": "string"
+        }
+      }
+    },
+    "Level": {
+      "type": "object",
+      "required": [
+        "title",
+        "color"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
         }
       }
     }
