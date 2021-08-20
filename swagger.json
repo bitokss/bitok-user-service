@@ -376,7 +376,7 @@
         }
       }
     },
-    "/users/byToken/{token}": {
+    "/users/byToken/{token}/": {
       "get": {
         "tags": [
           "users"
@@ -418,7 +418,7 @@
         }
       }
     },
-    "/users/byUsername/{username}": {
+    "/users/byUsername/{username}/": {
       "get": {
         "tags": [
           "users"
@@ -1413,6 +1413,11 @@
         "blocked": {
           "type": "boolean",
           "default": false
+        },
+        "roles" : {
+          "type": "array",
+          "description": "array of roles id",
+          "default": []
         }
       }
     },
@@ -1424,6 +1429,11 @@
       "properties": {
         "title": {
           "type": "string"
+        },
+        "permissions" : {
+          "type": "array",
+          "description": "array of permissions id",
+          "default": []
         }
       }
     },
