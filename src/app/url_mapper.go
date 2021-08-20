@@ -9,11 +9,12 @@ import (
 
 func urlMapper() {
 	// users
-	e.POST(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UserController.Create, middlewares.OnlyWithPermissions)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UserController.FindAll)
-	e.DELETE(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UserController.Delete)
-	e.PUT(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UserController.Update)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UserController.Find)
+	e.POST(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UserController.Create, middlewares.OnlyWithPermissions([]string{constants.AddUsersPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UserController.FindAll, middlewares.OnlyWithPermissions([]string{constants.FindAllUsersPermission}))
+	e.DELETE(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UserController.Delete, middlewares.OnlyWithPermissions([]string{constants.DeleteUsersPermission}))
+	e.PUT(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UserController.Update, middlewares.OnlyWithPermissions([]string{constants.UpdateUsersPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UserController.Find, middlewares.OnlyWithPermissions([]string{constants.FindUsersPermission}))
+
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/register"), controllers.UserController.Register)
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/login"), controllers.UserController.Login)
 	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byToken/:token"), controllers.UserController.FindByToken)
@@ -21,27 +22,27 @@ func urlMapper() {
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/resetPassword"), controllers.UserController.ResetPassword)
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/tickRequest"), controllers.UserController.TickRequest)
 	// profile
-	e.PUT(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.CreateOrUpdate)
+	e.PUT(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.CreateOrUpdate, middlewares.OnlyWithPermissionsOrOwner([]string{constants.CreateOrUpdateProfilePermission}))
 	e.GET(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.Find)
 	// codes
 	e.POST(fmt.Sprintf(constants.V1Prefix, "codes/send"), controllers.CodesController.Send)
 	e.POST(fmt.Sprintf(constants.V1Prefix, "codes/verify"), controllers.CodesController.Verify)
 	// levels
-	e.POST(fmt.Sprintf(constants.V1Prefix, "levels"), controllers.LevelsController.Create)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "levels"), controllers.LevelsController.FindAll)
-	e.DELETE(fmt.Sprintf(constants.V1Prefix, "levels/:id"), controllers.LevelsController.Delete)
-	e.PUT(fmt.Sprintf(constants.V1Prefix, "levels/:id"), controllers.LevelsController.Update)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "levels/:id"), controllers.LevelsController.Find)
+	e.POST(fmt.Sprintf(constants.V1Prefix, "levels"), controllers.LevelsController.Create, middlewares.OnlyWithPermissions([]string{constants.AddLevelsPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "levels"), controllers.LevelsController.FindAll, middlewares.OnlyWithPermissions([]string{constants.FindAllLevelsPermission}))
+	e.DELETE(fmt.Sprintf(constants.V1Prefix, "levels/:id"), controllers.LevelsController.Delete, middlewares.OnlyWithPermissions([]string{constants.DeleteLevelsPermission}))
+	e.PUT(fmt.Sprintf(constants.V1Prefix, "levels/:id"), controllers.LevelsController.Update, middlewares.OnlyWithPermissions([]string{constants.UpdateLevelsPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "levels/:id"), controllers.LevelsController.Find, middlewares.OnlyWithPermissions([]string{constants.FindLevelsPermission}))
 	// roles
-	e.POST(fmt.Sprintf(constants.V1Prefix, "roles"), controllers.RolesController.Create)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "roles"), controllers.RolesController.FindAll)
-	e.DELETE(fmt.Sprintf(constants.V1Prefix, "roles/:id"), controllers.RolesController.Delete)
-	e.PUT(fmt.Sprintf(constants.V1Prefix, "roles/:id"), controllers.RolesController.Update)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "roles/:id"), controllers.RolesController.Find)
+	e.POST(fmt.Sprintf(constants.V1Prefix, "roles"), controllers.RolesController.Create, middlewares.OnlyWithPermissions([]string{constants.AddRolesPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "roles"), controllers.RolesController.FindAll, middlewares.OnlyWithPermissions([]string{constants.FindAllRolesPermission}))
+	e.DELETE(fmt.Sprintf(constants.V1Prefix, "roles/:id"), controllers.RolesController.Delete, middlewares.OnlyWithPermissions([]string{constants.DeleteRolesPermission}))
+	e.PUT(fmt.Sprintf(constants.V1Prefix, "roles/:id"), controllers.RolesController.Update, middlewares.OnlyWithPermissions([]string{constants.UpdateRolesPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "roles/:id"), controllers.RolesController.Find, middlewares.OnlyWithPermissions([]string{constants.FindRolesPermission}))
 	// permissions
-	e.POST(fmt.Sprintf(constants.V1Prefix, "permissions"), controllers.PermissionsController.Create)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "permissions"), controllers.PermissionsController.FindAll)
-	e.DELETE(fmt.Sprintf(constants.V1Prefix, "permissions/:id"), controllers.PermissionsController.Delete)
-	e.PUT(fmt.Sprintf(constants.V1Prefix, "permissions/:id"), controllers.PermissionsController.Update)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "permissions/:id"), controllers.PermissionsController.Find)
+	e.POST(fmt.Sprintf(constants.V1Prefix, "permissions"), controllers.PermissionsController.Create, middlewares.OnlyWithPermissions([]string{constants.AddPermissionsPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "permissions"), controllers.PermissionsController.FindAll, middlewares.OnlyWithPermissions([]string{constants.FindAllPermissionsPermission}))
+	e.DELETE(fmt.Sprintf(constants.V1Prefix, "permissions/:id"), controllers.PermissionsController.Delete, middlewares.OnlyWithPermissions([]string{constants.DeletePermissionsPermission}))
+	e.PUT(fmt.Sprintf(constants.V1Prefix, "permissions/:id"), controllers.PermissionsController.Update, middlewares.OnlyWithPermissions([]string{constants.UpdatePermissionsPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "permissions/:id"), controllers.PermissionsController.Find, middlewares.OnlyWithPermissions([]string{constants.FindPermissionsPermission}))
 }
