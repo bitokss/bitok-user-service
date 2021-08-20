@@ -20,6 +20,14 @@
       "description": "user service api"
     },
     {
+      "name": "profile",
+      "description": "users profile api"
+    },
+    {
+      "name": "codes",
+      "description": "api for managing verification codes"
+    },
+    {
       "name": "levels",
       "description": "api for managing level and user levels"
     },
@@ -58,7 +66,7 @@
           }
         ],
         "responses": {
-          "405": {
+          "400": {
             "description": "invalid input",
             "schema": {
               "$ref": "#/definitions/RestResp"
@@ -207,7 +215,7 @@
           }
         ],
         "responses": {
-          "405": {
+          "400": {
             "description": "invalid input",
             "schema": {
               "$ref": "#/definitions/RestResp"
@@ -452,10 +460,10 @@
         }
       }
     },
-    "/users/sendCode/": {
+    "/codes/send/": {
       "post": {
         "tags": [
-          "users"
+          "codes"
         ],
         "summary": "send verification code to user",
         "description": "",
@@ -483,36 +491,30 @@
           }
         ],
         "responses": {
-          "405": {
-            "description": "invalid input",
+          "400": {
+            "description": "bad request",
             "schema": {
               "$ref": "#/definitions/RestResp"
-            },
-            "400": {
-              "description": "bad request",
-              "schema": {
-                "$ref": "#/definitions/RestResp"
-              }
-            },
-            "200": {
-              "description": "success",
-              "schema": {
-                "example": {
-                  "message": "string",
-                  "error": false,
-                  "status": 200,
-                  "data": {}
-                }
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
               }
             }
           }
         }
       }
     },
-    "/users/verify/": {
+    "/codes/verify/": {
       "post": {
         "tags": [
-          "users"
+          "codes"
         ],
         "summary": "verify phone by verification code",
         "description": "",
@@ -545,32 +547,26 @@
           }
         ],
         "responses": {
-          "405": {
-            "description": "invalid input",
+          "400": {
+            "description": "bad request",
             "schema": {
               "$ref": "#/definitions/RestResp"
-            },
-            "400": {
-              "description": "bad request",
-              "schema": {
-                "$ref": "#/definitions/RestResp"
-              }
-            },
-            "404": {
-              "description": "code not found",
-              "schema": {
-                "$ref": "#/definitions/RestResp"
-              }
-            },
-            "200": {
-              "description": "success",
-              "schema": {
-                "example": {
-                  "message": "string",
-                  "error": false,
-                  "status": 200,
-                  "data": {}
-                }
+            }
+          },
+          "404": {
+            "description": "code not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
               }
             }
           }
@@ -597,38 +593,32 @@
             "type": "string"
           },
           {
-            "name": "password",
+            "name": "newPassword",
             "in": "query",
             "type": "integer"
           }
         ],
         "responses": {
-          "405": {
-            "description": "invalid input",
+          "400": {
+            "description": "bad request",
             "schema": {
               "$ref": "#/definitions/RestResp"
-            },
-            "400": {
-              "description": "bad request",
-              "schema": {
-                "$ref": "#/definitions/RestResp"
-              }
-            },
-            "404": {
-              "description": "not found",
-              "schema": {
-                "$ref": "#/definitions/RestResp"
-              }
-            },
-            "200": {
-              "description": "success",
-              "schema": {
-                "example": {
-                  "message": "string",
-                  "error": false,
-                  "status": 200,
-                  "data": {}
-                }
+            }
+          },
+          "404": {
+            "description": "not found",
+            "schema": {
+              "$ref": "#/definitions/RestResp"
+            }
+          },
+          "200": {
+            "description": "success",
+            "schema": {
+              "example": {
+                "message": "string",
+                "error": false,
+                "status": 200,
+                "data": {}
               }
             }
           }
@@ -643,18 +633,18 @@
         "summary": "request for authentication in order to obtain colored tick"
       }
     },
-    "/users/{username}/profile": {
+    "/profile/{username}/": {
       "put": {
         "tags": [
-          "users"
+          "profile"
         ],
         "summary": "create or update user profile"
       },
-      "get" : {
+      "get": {
         "tags": [
-          "users"
+          "profile"
         ],
-        "summary": "find user by username"
+        "summary": "find user profile by username"
       }
     },
     "/levels/": {
@@ -682,12 +672,6 @@
           }
         ],
         "responses": {
-          "405": {
-            "description": "invalid input",
-            "schema": {
-              "$ref": "#/definitions/RestResp"
-            }
-          },
           "401": {
             "description": "unauthorized - only user with 'add:levels' permission",
             "schema": {
@@ -831,7 +815,7 @@
           }
         ],
         "responses": {
-          "405": {
+          "400": {
             "description": "invalid input",
             "schema": {
               "$ref": "#/definitions/RestResp"
@@ -911,12 +895,12 @@
             "description": "User object that needs to be sent to the user service",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Level"
+              "$ref": "#/definitions/Role"
             }
           }
         ],
         "responses": {
-          "405": {
+          "400": {
             "description": "invalid input",
             "schema": {
               "$ref": "#/definitions/RestResp"
@@ -1060,12 +1044,12 @@
             "description": "Level object that needs to be sent to the user service",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Level"
+              "$ref": "#/definitions/Role"
             }
           }
         ],
         "responses": {
-          "405": {
+          "400": {
             "description": "invalid input",
             "schema": {
               "$ref": "#/definitions/RestResp"
@@ -1145,12 +1129,12 @@
             "description": "User object that needs to be sent to the user service",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Level"
+              "$ref": "#/definitions/Permission"
             }
           }
         ],
         "responses": {
-          "405": {
+          "400": {
             "description": "invalid input",
             "schema": {
               "$ref": "#/definitions/RestResp"
@@ -1294,12 +1278,12 @@
             "description": "Level object that needs to be sent to the user service",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/Level"
+              "$ref": "#/definitions/Permission"
             }
           }
         ],
         "responses": {
-          "405": {
+          "400": {
             "description": "invalid input",
             "schema": {
               "$ref": "#/definitions/RestResp"

@@ -3,9 +3,11 @@ module github.com/bitokss/bitok-user-service
 go 1.15
 
 require (
+	github.com/alidevjimmy/go-rest-utils v0.0.0-20210820055509-ea50fc42cc9d // indirect
 	github.com/beego/bee/v2 v2.0.2 // indirect
 	github.com/flosch/pongo2 v0.0.0-20200913210552-0d938eb266f3 // indirect
 	github.com/go-delve/delve v1.7.0 // indirect
+	github.com/go-playground/validator/v10 v10.9.0
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/jackc/pgx/v4 v4.13.0 // indirect
 	github.com/labstack/echo/v4 v4.5.0
