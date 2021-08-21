@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/alidevjimmy/go-rest-utils/crypto"
 	"github.com/bitokss/bitok-user-service/constants"
 	"github.com/bitokss/bitok-user-service/domains/v1"
 	"github.com/bitokss/bitok-user-service/repositories/postgres/v1"
@@ -8,6 +9,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"net/http"
+	"os"
+	"strconv"
 )
 
 var (
@@ -37,50 +40,46 @@ func StartApp(port string) {
 	if err != nil {
 		e.Logger.Error(err)
 	}
-	// add full user service permissions
-	addPermissions(db)
-	// add god role
-	addRoles(db)
 	// add god to db if not exists :) (main admin)
 	addGod(db)
 	// start echo server
 	e.Logger.Error(e.Start(port))
 }
 
-func addPermissions(db *gorm.DB) {
-	tx := db.Begin()
-	tx.SavePoint("begin")
-	for _ , v := range constants.Permissions {
-		// check permission exists or not
-		permission := &domains.Permission{}
-		res := tx.Where("symbol = ?" , v.Symbol).First(&permission)
-		if res.Error != nil {
-			tx.RollbackTo("begin")
-			e.Logger.Error("error in getting data from permissions table")
-		}
-		if permission != nil {
-			continue
-		}
-		// permission not exists so we should add it to database
-		res = tx.Create(v)
-		if res.Error != nil {
-			tx.RollbackTo("begin")
-			e.Logger.Error("error in setting data in permissions table")
-		}
-	}
-}
 
-func addRoles(db *gorm.DB) {
 
-}
 
 func addGod(db *gorm.DB) {
-	//phone, password, personnelNum, username, email, firstname, lastname := os.Getenv("GOD_PHONE"),
-	//	os.Getenv("GOD_PASSWORD"),
-	//	os.Getenv("GOD_PERSONNELNUM"),
-	//	os.Getenv("GOD_USERNAME"),
-	//	os.Getenv("GOD_EMAIL"),
-	//	os.Getenv("GOD_FIRSTNAME"),
-	//	os.Getenv("GOD_LASTNAME")
-
+	phone, password, username, email, firstname, lastname := os.Getenv("GOD_PHONE"),
+		os.Getenv("GOD_PASSWORD"),
+		os.Getenv("GOD_USERNAME"),
+		os.Getenv("GOD_EMAIL"),
+		os.Getenv("GOD_FIRSTNAME"),
+		os.Getenv("GOD_LASTNAME")
+	personnelNum , err := strconv.Atoi(os.Getenv("GOD_PERSONNELNUM"))
+	if err != nil {
+		e.Logger.Error("GOD_PERSONNELNUM is not valid")
+	}
+	level := domains.Level{
+		Title: "کاربر",
+		Color: "#ffffff",
+	}
+	role := domains.Role{
+		Title: "genesis",
+		Permissions: constants.Permissions,
+	}
+	user := domains.User{
+		Phone: phone,
+		Password: crypto.GenerateSha256(password),
+		PersonnelNum: personnelNum,
+		Username: username,
+		Email: email,
+		FirstName: firstname,
+		LastName: lastname,
+		Roles: []domains.Role{role},
+		Level: level,
+	}
+	if err := db.Where("phone = ?" , user.Phone).FirstOrCreate(&user).Error; err != nil {
+		e.Logger.Error(err)
+	}
 }

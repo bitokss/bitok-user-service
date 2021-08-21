@@ -25,13 +25,13 @@ type permissionsControllerInterface interface {
 type permissionsController struct{}
 
 func (p permissionsController) Create(c echo.Context) error {
-	permission := new(domains.CreatePermissionRequest)
-	// validate permission request data and bind it on CreatePermissionRequest struct
+	permission := new(domains.CreatePermissionsRequest)
+	// validate permission request data and bind it on CreatePermissionsRequest struct
 	err := utils.ValidateAndBind(c, permission)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	resp, err := services.PermissionService.Create(*permission)
+	resp, err := services.PermissionsService.Create(*permission)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
@@ -61,7 +61,7 @@ func (p permissionsController) FindAll(c echo.Context) error {
 		offset = o
 	}
 	// send serialized to service for other operations
-	resp, err := services.PermissionService.FindAll(limit, offset)
+	resp, err := services.PermissionsService.FindAll(limit, offset)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
@@ -73,7 +73,7 @@ func (p permissionsController) Find(c echo.Context) error {
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	resp, err := services.PermissionService.Find(pid)
+	resp, err := services.PermissionsService.Find(pid)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
@@ -85,12 +85,12 @@ func (p permissionsController) Update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	permission := new(domains.CreatePermissionRequest)
+	permission := new(domains.CreatePermissionsRequest)
 	err = utils.ValidateAndBind(c, permission)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	resp, err := services.PermissionService.Update(pid, *permission)
+	resp, err := services.PermissionsService.Update(pid, *permission)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
@@ -102,7 +102,7 @@ func (p permissionsController) Delete(c echo.Context) error {
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	resp, err := services.PermissionService.Delete(pid)
+	resp, err := services.PermissionsService.Delete(pid)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}

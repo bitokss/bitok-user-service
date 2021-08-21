@@ -8,6 +8,10 @@ import (
 	"os"
 )
 
+var (
+	DB *gorm.DB = PostgresInit()
+)
+
 func PostgresInit() *gorm.DB {
 	host, user, password, name, port := os.Getenv("DB_HOST"),
 	os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"),

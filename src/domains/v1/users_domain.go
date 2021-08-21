@@ -31,6 +31,7 @@ type CreateUsersRequest struct {
 }
 
 type UserResp struct {
+	ID           uint   `json:"id"`
 	Phone        string `json:"phone"`
 	Username     string `json:"username"`
 	Email        string `json:"email"`
@@ -38,6 +39,15 @@ type UserResp struct {
 	FirstName    string `json:"first_name"`
 	LastName     string `json:"last_name"`
 	Blocked      bool   `json:"blocked"`
-	Level        Level  `json:"level"`
+	LevelID      uint   `json:"level_id"`
 	Roles        []Role `json:"roles"`
+}
+
+type LoginRequest struct {
+	Phone    string `json:"phone" validate:"required"`
+	Password string `json:"password" validate:"required"`
+}
+
+type TokenResp struct {
+	Token string `json:"token"`
 }

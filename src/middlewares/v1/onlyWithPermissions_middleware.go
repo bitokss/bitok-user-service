@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"fmt"
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
 	"github.com/bitokss/bitok-user-service/constants"
 	"github.com/bitokss/bitok-user-service/domains/v1"
@@ -25,6 +26,7 @@ func OnlyWithPermissions(permissions []string) echo.MiddlewareFunc {
 			}
 			user , ok := resp.Data().(domains.UserResp)
 			if !ok {
+				fmt.Println(err)
 				return c.JSON(http.StatusInternalServerError , rest_response.NewInternalServerError(constants.InternalServerErr , nil))
 			}
 			// O(n+m) checker for permissions

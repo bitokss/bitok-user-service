@@ -350,12 +350,12 @@
         "parameters": [
           {
             "name": "phone",
-            "in": "query",
+            "in": "body",
             "type": "string"
           },
           {
             "name": "password",
-            "in": "query",
+            "in": "body",
             "type": "string"
           }
         ],

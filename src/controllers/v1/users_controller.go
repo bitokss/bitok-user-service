@@ -120,7 +120,16 @@ func (u *usersController) Register(c echo.Context) error {
 }
 
 func (u *usersController) Login(c echo.Context) error {
-	panic("implement me")
+	reqBody := new(domains.LoginRequest)
+	err := utils.ValidateAndBind(c,reqBody)
+	if err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	resp , err := services.UsersService.Login(*reqBody)
+	if err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	return c.JSON(resp.Status(), resp)
 }
 
 func (u *usersController) FindByToken(c echo.Context) error {
