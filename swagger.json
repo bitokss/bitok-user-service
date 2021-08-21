@@ -205,6 +205,12 @@
         ],
         "parameters": [
           {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
             "name": "body",
             "in": "body",
             "description": "User object that needs to be sent to the user service",
@@ -394,7 +400,8 @@
             "name": "token",
             "in": "path",
             "type": "string",
-            "format": "int64"
+            "format": "int64",
+            "required": true
           }
         ],
         "responses": {
@@ -695,7 +702,7 @@
         "tags": [
           "levels"
         ],
-        "summary": "get users",
+        "summary": "get levels",
         "consumes": [
           "application/json"
         ],
@@ -804,6 +811,12 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
           {
             "name": "body",
             "in": "body",
@@ -929,7 +942,7 @@
         "tags": [
           "roles"
         ],
-        "summary": "get users",
+        "summary": "get roles",
         "consumes": [
           "application/json"
         ],
@@ -1038,6 +1051,12 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
           {
             "name": "body",
             "in": "body",
@@ -1163,7 +1182,7 @@
         "tags": [
           "permissions"
         ],
-        "summary": "get users",
+        "summary": "get permissions",
         "consumes": [
           "application/json"
         ],
@@ -1272,6 +1291,12 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
           {
             "name": "body",
             "in": "body",

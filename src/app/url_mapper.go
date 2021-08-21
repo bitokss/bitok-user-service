@@ -9,20 +9,20 @@ import (
 
 func urlMapper() {
 	// users
-	e.POST(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UserController.Create, middlewares.OnlyWithPermissions([]string{constants.AddUsersPermission}))
-	e.GET(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UserController.FindAll, middlewares.OnlyWithPermissions([]string{constants.FindAllUsersPermission}))
-	e.DELETE(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UserController.Delete, middlewares.OnlyWithPermissions([]string{constants.DeleteUsersPermission}))
-	e.PUT(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UserController.Update, middlewares.OnlyWithPermissions([]string{constants.UpdateUsersPermission}))
-	e.GET(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UserController.Find, middlewares.OnlyWithPermissions([]string{constants.FindUsersPermission}))
+	e.POST(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UsersController.Create, middlewares.OnlyWithPermissions([]string{constants.AddUsersPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UsersController.FindAll, middlewares.OnlyWithPermissions([]string{constants.FindAllUsersPermission}))
+	e.DELETE(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UsersController.Delete, middlewares.OnlyWithPermissions([]string{constants.DeleteUsersPermission}))
+	e.PUT(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UsersController.Update, middlewares.OnlyWithPermissions([]string{constants.UpdateUsersPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UsersController.Find, middlewares.OnlyWithPermissions([]string{constants.FindUsersPermission}))
 
-	e.POST(fmt.Sprintf(constants.V1Prefix, "users/register"), controllers.UserController.Register)
-	e.POST(fmt.Sprintf(constants.V1Prefix, "users/login"), controllers.UserController.Login)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byToken/:token"), controllers.UserController.FindByToken)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byToken/:username"), controllers.UserController.FindByUsername)
-	e.POST(fmt.Sprintf(constants.V1Prefix, "users/resetPassword"), controllers.UserController.ResetPassword)
-	e.POST(fmt.Sprintf(constants.V1Prefix, "users/tickRequest"), controllers.UserController.TickRequest)
+	e.POST(fmt.Sprintf(constants.V1Prefix, "users/register"), controllers.UsersController.Register)
+	e.POST(fmt.Sprintf(constants.V1Prefix, "users/login"), controllers.UsersController.Login)
+	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byToken/:token"), controllers.UsersController.FindByToken)
+	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byToken/:username"), controllers.UsersController.FindByUsername)
+	e.POST(fmt.Sprintf(constants.V1Prefix, "users/resetPassword"), controllers.UsersController.ResetPassword)
+	e.POST(fmt.Sprintf(constants.V1Prefix, "users/tickRequest"), controllers.UsersController.TickRequest, middlewares.OnlyLogin)
 	// profile
-	e.PUT(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.CreateOrUpdate, middlewares.OnlyWithPermissionsOrOwner([]string{constants.CreateOrUpdateProfilePermission}))
+	e.PUT(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.CreateOrUpdate, middlewares.OnlyLogin) // in service check that user who requested is the owner of this profile
 	e.GET(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.Find)
 	// codes
 	e.POST(fmt.Sprintf(constants.V1Prefix, "codes/send"), controllers.CodesController.Send)

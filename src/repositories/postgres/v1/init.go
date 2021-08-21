@@ -9,11 +9,9 @@ import (
 )
 
 func PostgresInit() *gorm.DB {
-	host := os.Getenv("DB_HOST")
-	user := os.Getenv("DB_USER")
-	password := os.Getenv("DB_PASSWORD")
-	name := os.Getenv("DB_NAME")
-	port := os.Getenv("DB_PORT")
+	host, user, password, name, port := os.Getenv("DB_HOST"),
+	os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"),
+	os.Getenv("DB_NAME"), os.Getenv("DB_PORT")
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s", host, user, password, name, port)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {

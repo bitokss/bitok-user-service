@@ -17,7 +17,7 @@ type User struct {
 	Roles        []Role `gorm:"many2many:user_roles"`
 }
 
-type CreateReq struct {
+type CreateUsersRequest struct {
 	Phone        string `json:"phone" validate:"required"`
 	Username     string `json:"username" validate:"required"`
 	Email        string `json:"email" validate:"required,email"`
@@ -27,6 +27,7 @@ type CreateReq struct {
 	Password     string `json:"password" validate:"required"`
 	Blocked      bool   `json:"blocked" validate:"required"`
 	LevelID      uint   `json:"level_id" validate:"required"`
+	Roles        []Role `json:"roles"`
 }
 
 type UserResp struct {
