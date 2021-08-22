@@ -4,7 +4,7 @@ import (
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
 	"github.com/bitokss/bitok-user-service/constants"
 	"github.com/bitokss/bitok-user-service/domains/v1"
-	repositories "github.com/bitokss/bitok-user-service/repositories/postgres/v1"
+	"github.com/bitokss/bitok-user-service/repositories/postgres/v1"
 	"github.com/golang-jwt/jwt"
 	"net/http"
 	"time"
@@ -16,15 +16,16 @@ var (
 
 type usersServiceInterface interface {
 	Create(role domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp)
-	FindAll(limit , offset int) (rest_response.RestResp, rest_response.RestResp)
+	FindAll(limit, offset int) (rest_response.RestResp, rest_response.RestResp)
 	Find(pid int) (rest_response.RestResp, rest_response.RestResp)
 	Delete(pid int) (rest_response.RestResp, rest_response.RestResp)
 	Update(pid int, role domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp)
-	FindByToken(token string) (rest_response.RestResp , rest_response.RestResp)
-	Login(body domains.LoginRequest)(rest_response.RestResp , rest_response.RestResp)
+	FindByToken(token string) (rest_response.RestResp, rest_response.RestResp)
+	Login(body domains.LoginRequest) (rest_response.RestResp, rest_response.RestResp)
+	FindByUsername(username string) (rest_response.RestResp, rest_response.RestResp)
 }
 
-type usersService struct {}
+type usersService struct{}
 
 func (u *usersService) Update(pid int, role domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp) {
 	return nil, nil
@@ -43,26 +44,43 @@ func (u *usersService) FindAll(limit, offset int) (rest_response.RestResp, rest_
 }
 
 func (u *usersService) Create(role domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp) {
-	return nil , nil
+	return nil, nil
 }
 
-func (u *usersService) FindByToken(token string) (rest_response.RestResp , rest_response.RestResp) {
-	return nil,nil
-}
-func (u *usersService) Login(body domains.LoginRequest)(rest_response.RestResp , rest_response.RestResp) {
-	user , err := repositories.UsersRepository.FindByPhoneAndPassword(body.Phone, body.Password)
+func (u *usersService) FindByToken(token string) (rest_response.RestResp, rest_response.RestResp) {
+	claim, err := JwtService.Verify(token)
 	if err != nil {
-		return nil , err
+		return nil, err
+	}
+	user, err := repositories.UsersRepository.FindByID(uint(claim.UID))
+	if err != nil {
+		return nil, err
+	}
+	return rest_response.NewSuccessResponse(constants.SuccessOperation, user, http.StatusOK), nil
+}
+
+func (u *usersService) Login(body domains.LoginRequest) (rest_response.RestResp, rest_response.RestResp) {
+	user, err := repositories.UsersRepository.FindByPhoneAndPassword(body.Phone, body.Password)
+	if err != nil {
+		return nil, err
 	}
 	claim := domains.Jwt{
 		UID: int(user.ID),
-		StandardClaims : jwt.StandardClaims{
-			ExpiresAt : time.Now().Add(time.Hour * 24 * 7 * 2).Unix(),
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(time.Hour * 24 * 7 * 2).Unix(),
 		},
 	}
-	token , err := JwtService.Generate(claim)
+	token, err := JwtService.Generate(claim)
 	if err != nil {
-		return nil , err
+		return nil, err
 	}
-	return rest_response.NewSuccessResponse(constants.SuccessLogin , domains.TokenResp{Token: token},http.StatusOK), nil
+	return rest_response.NewSuccessResponse(constants.SuccessLogin, domains.TokenResp{Token: token}, http.StatusOK), nil
+}
+
+func (u *usersService) FindByUsername(username string) (rest_response.RestResp, rest_response.RestResp) {
+	user, err := repositories.UsersRepository.FindByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+	return rest_response.NewSuccessResponse(constants.SuccessOperation, user, http.StatusOK), nil
 }

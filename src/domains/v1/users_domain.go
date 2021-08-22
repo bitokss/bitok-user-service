@@ -39,8 +39,8 @@ type UserResp struct {
 	FirstName    string `json:"first_name"`
 	LastName     string `json:"last_name"`
 	Blocked      bool   `json:"blocked"`
-	LevelID      uint   `json:"level_id"`
-	Roles        []Role `json:"roles"`
+	Level        LevelResp  `json:"level"`
+	Roles        []RoleResp `json:"roles"`
 }
 
 type LoginRequest struct {

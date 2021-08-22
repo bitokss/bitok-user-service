@@ -145,7 +145,15 @@ func (u *usersController) FindByToken(c echo.Context) error {
 }
 
 func (u *usersController) FindByUsername(c echo.Context) error {
-	panic("implement me")
+	username := c.Param("username")
+	if username == "" {
+		return c.JSON(http.StatusBadRequest, rest_response.NewBadRequestError(constants.InvalidInputErr , nil))
+	}
+	resp, err := services.UsersService.FindByUsername(username)
+	if err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	return c.JSON(resp.Status(), resp)
 }
 
 func (u *usersController) ResetPassword(c echo.Context) error {

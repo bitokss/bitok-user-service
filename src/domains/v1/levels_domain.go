@@ -12,3 +12,8 @@ type CreateLevelsRequest struct {
 	Title string `json:"title" validate:"required"`
 	Color string `json:"color" validate:"required"`
 }
+
+type LevelResp struct {
+	Title string `json:"title"`
+	Color string `json:"color"`
+}
