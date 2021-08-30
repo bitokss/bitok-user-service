@@ -18,7 +18,7 @@ func urlMapper() {
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/register"), controllers.UsersController.Register)
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/login"), controllers.UsersController.Login)
 	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byToken/:token"), controllers.UsersController.FindByToken)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byUsername/:username"), controllers.UsersController.FindByUsername)
+	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byUsername/:username"), controllers.UsersController.FindByUsername, middlewares.OnlyWithPermissions([]string{constants.FindUsersPermission}))
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/resetPassword"), controllers.UsersController.ResetPassword)
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/tickRequest"), controllers.UsersController.TickRequest, middlewares.OnlyLogin)
 	// profile

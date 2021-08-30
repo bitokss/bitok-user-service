@@ -1,13 +1,14 @@
 package services
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
 	"github.com/bitokss/bitok-user-service/constants"
 	"github.com/bitokss/bitok-user-service/domains/v1"
-	"github.com/bitokss/bitok-user-service/repositories/postgres/v1"
+	repositories "github.com/bitokss/bitok-user-service/repositories/postgres/v1"
 	"github.com/golang-jwt/jwt"
-	"net/http"
-	"time"
 )
 
 var (
@@ -15,11 +16,11 @@ var (
 )
 
 type usersServiceInterface interface {
-	Create(role domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp)
+	Create(user domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp)
 	FindAll(limit, offset int) (rest_response.RestResp, rest_response.RestResp)
-	Find(pid int) (rest_response.RestResp, rest_response.RestResp)
-	Delete(pid int) (rest_response.RestResp, rest_response.RestResp)
-	Update(pid int, role domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp)
+	Find(uid int) (rest_response.RestResp, rest_response.RestResp)
+	Delete(uid int) (rest_response.RestResp, rest_response.RestResp)
+	Update(uid int, user domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp)
 	FindByToken(token string) (rest_response.RestResp, rest_response.RestResp)
 	Login(body domains.LoginRequest) (rest_response.RestResp, rest_response.RestResp)
 	FindByUsername(username string) (rest_response.RestResp, rest_response.RestResp)
@@ -27,23 +28,23 @@ type usersServiceInterface interface {
 
 type usersService struct{}
 
-func (u *usersService) Update(pid int, role domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp) {
+func (*usersService) Update(uid int, user domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp) {
 	return nil, nil
 }
 
-func (u *usersService) Find(pid int) (rest_response.RestResp, rest_response.RestResp) {
+func (*usersService) Find(uid int) (rest_response.RestResp, rest_response.RestResp) {
 	return nil, nil
 }
 
-func (u *usersService) Delete(pid int) (rest_response.RestResp, rest_response.RestResp) {
+func (*usersService) Delete(uid int) (rest_response.RestResp, rest_response.RestResp) {
 	return nil, nil
 }
 
-func (u *usersService) FindAll(limit, offset int) (rest_response.RestResp, rest_response.RestResp) {
+func (*usersService) FindAll(limit, offset int) (rest_response.RestResp, rest_response.RestResp) {
 	return nil, nil
 }
 
-func (u *usersService) Create(role domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp) {
+func (*usersService) Create(user domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp) {
 	return nil, nil
 }
 

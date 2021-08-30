@@ -9,11 +9,12 @@ type Permission struct {
 }
 
 type CreatePermissionsRequest struct {
-	Title string `json:"title" validate:"required"`
+	Title  string `json:"title" validate:"required"`
 	Symbol string `json:"symbol" validate:"required"`
 }
 
 type PermissionResp struct {
-	Title string `json:"title"`
+	ID     uint   `json:"id"`
+	Title  string `json:"title"`
 	Symbol string `json:"symbol"`
 }

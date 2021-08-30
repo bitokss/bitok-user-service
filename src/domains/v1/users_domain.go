@@ -31,14 +31,14 @@ type CreateUsersRequest struct {
 }
 
 type UserResp struct {
-	ID           uint   `json:"id"`
-	Phone        string `json:"phone"`
-	Username     string `json:"username"`
-	Email        string `json:"email"`
-	PersonnelNum int    `json:"personnel_num"`
-	FirstName    string `json:"first_name"`
-	LastName     string `json:"last_name"`
-	Blocked      bool   `json:"blocked"`
+	ID           uint       `json:"id"`
+	Phone        string     `json:"phone"`
+	Username     string     `json:"username"`
+	Email        string     `json:"email"`
+	PersonnelNum int        `json:"personnel_num"`
+	FirstName    string     `json:"first_name"`
+	LastName     string     `json:"last_name"`
+	Blocked      bool       `json:"blocked"`
 	Level        LevelResp  `json:"level"`
 	Roles        []RoleResp `json:"roles"`
 }

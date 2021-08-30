@@ -20,7 +20,7 @@ func ValidateAndCastToInt(param string) (int, rest_response.RestResp) {
 	return castedParam, nil
 }
 
-func ValidateAndBind(c echo.Context , i interface{}) rest_response.RestResp{
+func ValidateAndBind(c echo.Context, i interface{}) rest_response.RestResp {
 	if err := c.Bind(i); err != nil {
 		return rest_response.NewBadRequestError(constants.InvalidInputErr, nil)
 	}

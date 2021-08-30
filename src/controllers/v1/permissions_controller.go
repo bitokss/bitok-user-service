@@ -1,13 +1,14 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
 	"github.com/bitokss/bitok-user-service/constants"
 	"github.com/bitokss/bitok-user-service/domains/v1"
 	"github.com/bitokss/bitok-user-service/services/v1"
 	"github.com/bitokss/bitok-user-service/utils"
 	"github.com/labstack/echo/v4"
-	"strconv"
 )
 
 var (
@@ -41,8 +42,8 @@ func (p permissionsController) Create(c echo.Context) error {
 func (p permissionsController) FindAll(c echo.Context) error {
 	limit := 50
 	offset := 0
-	limitParam := c.Param("limit")
-	offsetParam := c.Param("offset")
+	limitParam := c.QueryParam("limit")
+	offsetParam := c.QueryParam("offset")
 	// check if param not sent, setting values of default
 	if limitParam != "" {
 		l, err := strconv.Atoi(limitParam)
@@ -90,7 +91,7 @@ func (p permissionsController) Update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	resp, err := services.PermissionsService.Update(pid, *permission)
+	resp, err := services.PermissionsService.Update(uint(pid), *permission)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}

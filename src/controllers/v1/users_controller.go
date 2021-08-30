@@ -121,11 +121,11 @@ func (u *usersController) Register(c echo.Context) error {
 
 func (u *usersController) Login(c echo.Context) error {
 	reqBody := new(domains.LoginRequest)
-	err := utils.ValidateAndBind(c,reqBody)
+	err := utils.ValidateAndBind(c, reqBody)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	resp , err := services.UsersService.Login(*reqBody)
+	resp, err := services.UsersService.Login(*reqBody)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
@@ -135,7 +135,7 @@ func (u *usersController) Login(c echo.Context) error {
 func (u *usersController) FindByToken(c echo.Context) error {
 	token := c.Param("token")
 	if token == "" {
-		return c.JSON(http.StatusBadRequest, rest_response.NewBadRequestError(constants.InvalidInputErr , nil))
+		return c.JSON(http.StatusBadRequest, rest_response.NewBadRequestError(constants.InvalidInputErr, nil))
 	}
 	resp, err := services.UsersService.FindByToken(token)
 	if err != nil {
@@ -147,7 +147,7 @@ func (u *usersController) FindByToken(c echo.Context) error {
 func (u *usersController) FindByUsername(c echo.Context) error {
 	username := c.Param("username")
 	if username == "" {
-		return c.JSON(http.StatusBadRequest, rest_response.NewBadRequestError(constants.InvalidInputErr , nil))
+		return c.JSON(http.StatusBadRequest, rest_response.NewBadRequestError(constants.InvalidInputErr, nil))
 	}
 	resp, err := services.UsersService.FindByUsername(username)
 	if err != nil {

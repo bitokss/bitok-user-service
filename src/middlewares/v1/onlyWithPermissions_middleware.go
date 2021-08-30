@@ -29,7 +29,7 @@ func OnlyWithPermissions(permissions []string) echo.MiddlewareFunc {
 			if err != nil {
 				return c.JSON(err.Status(), err)
 			}
-			user , ok:= resp.Data().(domains.UserResp)
+			user, ok := resp.Data().(domains.UserResp)
 			if !ok {
 				return c.JSON(http.StatusInternalServerError, rest_response.NewInternalServerError(constants.InternalServerErr, nil))
 			}

@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"fmt"
+
 	"github.com/alidevjimmy/go-rest-utils/crypto"
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
 	"github.com/bitokss/bitok-user-service/constants"
@@ -30,9 +31,9 @@ func (*usersRepository) FindByPhoneAndPassword(phone, password string) (domains.
 	if user.ID == 0 {
 		return domains.UserResp{}, rest_response.NewNotFoundError(fmt.Sprintf(constants.WrongPhoneOrPasswordErr), nil)
 	}
-	userResp , err := userSerialize(user)
+	userResp, err := userSerialize(user)
 	if err != nil {
-		return domains.UserResp{} , err
+		return domains.UserResp{}, err
 	}
 	return userResp, nil
 }
@@ -46,9 +47,9 @@ func (*usersRepository) FindByID(id uint) (domains.UserResp, rest_response.RestR
 	if user.ID == 0 {
 		return domains.UserResp{}, rest_response.NewNotFoundError(fmt.Sprintf(constants.NotFoundErr, constants.User), nil)
 	}
-	userResp , err := userSerialize(user)
+	userResp, err := userSerialize(user)
 	if err != nil {
-		return domains.UserResp{} , err
+		return domains.UserResp{}, err
 	}
 	return userResp, nil
 }
@@ -62,45 +63,36 @@ func (*usersRepository) FindByUsername(username string) (domains.UserResp, rest_
 	if user.ID == 0 {
 		return domains.UserResp{}, rest_response.NewNotFoundError(fmt.Sprintf(constants.NotFoundErr, constants.User), nil)
 	}
-	userResp , err := userSerialize(user)
+	userResp, err := userSerialize(user)
 	if err != nil {
-		return domains.UserResp{} , err
+		return domains.UserResp{}, err
 	}
 	return userResp, nil
 }
 
-func userSerialize(user domains.User) (domains.UserResp , rest_response.RestResp) {
-	var level domains.Level
-	//var permissions []domains.Permission
-	if err := DB.Where("id = ?" , user.LevelID).Find(&level).Error; err != nil {
-		fmt.Println(err)
-	}
-	if err := DB.Preload("Roles").Find(&user).Error; err != nil {
-		fmt.Println(err)
-	}
-	if err := DB.Preload("Permissions").Find(&user.Roles).Error; err != nil {
-		fmt.Println(err)
+func userSerialize(user domains.User) (domains.UserResp, rest_response.RestResp) {
+	if err := DB.Preload("Roles").Preload("Roles.Permissions").Preload("Level").Find(&user).Error; err != nil {
+		return domains.UserResp{}, rest_response.NewInternalServerError(constants.InternalServerErr, nil)
 	}
 	rolesResp := []domains.RoleResp{}
-	for _ , v := range user.Roles {
+	for _, v := range user.Roles {
 		permissionsResp := []domains.PermissionResp{}
-		for _ , v1 := range v.Permissions{
+		for _, v1 := range v.Permissions {
 			p := domains.PermissionResp{
-				Title: v1.Title,
+				Title:  v1.Title,
 				Symbol: v1.Symbol,
 			}
-			permissionsResp = append(permissionsResp , p)
+			permissionsResp = append(permissionsResp, p)
 		}
 		r := domains.RoleResp{
-			Title: v.Title,
+			Title:       v.Title,
 			Permissions: permissionsResp,
 		}
-		rolesResp = append(rolesResp , r)
+		rolesResp = append(rolesResp, r)
 	}
-
 	levelResp := domains.LevelResp{
-		Title: level.Title,
-		Color: level.Color,
+		Title: user.Level.Title,
+		Color: user.Level.Color,
 	}
 	userResp := domains.UserResp{
 		ID:           user.ID,
@@ -114,5 +106,5 @@ func userSerialize(user domains.User) (domains.UserResp , rest_response.RestResp
 		Level:        levelResp,
 		Roles:        rolesResp,
 	}
-	return userResp , nil
+	return userResp, nil
 }

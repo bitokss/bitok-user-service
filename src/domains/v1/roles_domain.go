@@ -14,6 +14,6 @@ type CreateRolesRequest struct {
 }
 
 type RoleResp struct {
-	Title       string       `json:"title"`
+	Title       string           `json:"title"`
 	Permissions []PermissionResp `json:"permissions"`
 }

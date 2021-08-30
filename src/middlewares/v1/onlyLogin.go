@@ -9,20 +9,20 @@ import (
 	"strings"
 )
 
-func OnlyLogin (next echo.HandlerFunc) echo.HandlerFunc {
+func OnlyLogin(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Request().Header.Get(echo.HeaderAuthorization)
 		if token == "" {
-			return c.JSON(http.StatusUnauthorized, rest_response.NewUnauthorizedError(constants.UnAuthorizedErr , nil))
+			return c.JSON(http.StatusUnauthorized, rest_response.NewUnauthorizedError(constants.UnAuthorizedErr, nil))
 		}
 		splitToken := strings.Split(token, "Bearer ")
 		if len(splitToken) != 2 {
-			return c.JSON(http.StatusUnauthorized, rest_response.NewUnauthorizedError(constants.UnAuthorizedErr , nil))
+			return c.JSON(http.StatusUnauthorized, rest_response.NewUnauthorizedError(constants.UnAuthorizedErr, nil))
 		}
 		token = splitToken[1]
-		_ , err := services.UsersService.FindByToken(token)
+		_, err := services.UsersService.FindByToken(token)
 		if err != nil {
-			return c.JSON(err.Status(),err)
+			return c.JSON(err.Status(), err)
 		}
 		return next(c)
 	}
