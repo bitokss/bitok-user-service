@@ -86,11 +86,11 @@ func (*permissionsRepository) Delete(id uint) rest_response.RestResp {
 	return nil
 }
 
-func serialaizePermission(permissoin domains.Permission) domains.PermissionResp {
+func serialaizePermission(permission domains.Permission) domains.PermissionResp {
 	pResp := domains.PermissionResp{
-		ID:     permissoin.Model.ID,
-		Title:  permissoin.Title,
-		Symbol: permissoin.Symbol,
+		ID:     permission.Model.ID,
+		Title:  permission.Title,
+		Symbol: permission.Symbol,
 	}
 	return pResp
 }

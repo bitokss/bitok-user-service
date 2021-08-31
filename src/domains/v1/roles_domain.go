@@ -9,11 +9,12 @@ type Role struct {
 }
 
 type CreateRolesRequest struct {
-	Title       string       `json:"title" validate:"required"`
-	Permissions []Permission `json:"permissions"`
+	Title       string `json:"title" validate:"required"`
+	Permissions []uint `json:"permissions"`
 }
 
 type RoleResp struct {
+	ID          uint             `json:"id"`
 	Title       string           `json:"title"`
 	Permissions []PermissionResp `json:"permissions"`
 }

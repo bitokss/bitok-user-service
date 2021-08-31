@@ -76,21 +76,10 @@ func userSerialize(user domains.User) (domains.UserResp, rest_response.RestResp)
 	}
 	rolesResp := []domains.RoleResp{}
 	for _, v := range user.Roles {
-		permissionsResp := []domains.PermissionResp{}
-		for _, v1 := range v.Permissions {
-			p := domains.PermissionResp{
-				Title:  v1.Title,
-				Symbol: v1.Symbol,
-			}
-			permissionsResp = append(permissionsResp, p)
-		}
-		r := domains.RoleResp{
-			Title:       v.Title,
-			Permissions: permissionsResp,
-		}
-		rolesResp = append(rolesResp, r)
+		rolesResp = append(rolesResp, serialaizeRole(v))
 	}
 	levelResp := domains.LevelResp{
+		ID:    user.Level.ID,
 		Title: user.Level.Title,
 		Color: user.Level.Color,
 	}

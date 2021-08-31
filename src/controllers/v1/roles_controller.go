@@ -1,13 +1,14 @@
 package controllers
 
 import (
+	"strconv"
+
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
 	"github.com/bitokss/bitok-user-service/constants"
 	"github.com/bitokss/bitok-user-service/domains/v1"
 	"github.com/bitokss/bitok-user-service/services/v1"
 	"github.com/bitokss/bitok-user-service/utils"
 	"github.com/labstack/echo/v4"
-	"strconv"
 )
 
 var (
@@ -90,7 +91,7 @@ func (r *rolesController) Update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	resp, err := services.RolesService.Update(rid, *role)
+	resp, err := services.RolesService.Update(uint(rid), *role)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
