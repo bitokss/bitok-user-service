@@ -14,7 +14,7 @@ type CreateLevelsRequest struct {
 }
 
 type LevelResp struct {
-	ID uint `json:"id"`
+	ID    uint   `json:"id"`
 	Title string `json:"title"`
 	Color string `json:"color"`
 }

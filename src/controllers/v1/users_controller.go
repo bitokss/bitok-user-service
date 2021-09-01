@@ -93,12 +93,12 @@ func (u *usersController) Update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	user := new(domains.CreateUsersRequest)
+	user := new(domains.UpdateUsersRequest)
 	err = utils.ValidateAndBind(c, user)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
-	resp, err := services.UsersService.Update(uid, *user)
+	resp, err := services.UsersService.Update(uint(uid), *user)
 	if err != nil {
 		return c.JSON(err.Status(), err)
 	}
@@ -116,6 +116,7 @@ func (u *usersController) Delete(c echo.Context) error {
 	}
 	return c.JSON(resp.Status(), resp)
 }
+
 func (u *usersController) Register(c echo.Context) error {
 	panic("implement me")
 }

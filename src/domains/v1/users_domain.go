@@ -25,9 +25,19 @@ type CreateUsersRequest struct {
 	FirstName    string `json:"first_name" validate:"required"`
 	LastName     string `json:"last_name" validate:"required"`
 	Password     string `json:"password" validate:"required"`
-	Blocked      bool   `json:"blocked" validate:"required"`
 	LevelID      uint   `json:"level_id" validate:"required"`
-	Roles        []Role `json:"roles"`
+	Roles        []uint `json:"roles"`
+}
+
+type UpdateUsersRequest struct {
+	Username     string `json:"username" validate:"required"`
+	Email        string `json:"email" validate:"required,email"`
+	PersonnelNum int    `json:"personnel_num" validate:"required"`
+	FirstName    string `json:"first_name" validate:"required"`
+	LastName     string `json:"last_name" validate:"required"`
+	Password     string `json:"password" validate:"required"`
+	LevelID      uint   `json:"level_id" validate:"required"`
+	Roles        []uint `json:"roles"`
 }
 
 type UserResp struct {

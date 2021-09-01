@@ -7,6 +7,7 @@ const (
 	BadRequestErr           = "درخواست نامعتبر است"
 	NotFoundErr             = "%s یافت نشد"
 	WrongPhoneOrPasswordErr = "شماره تماس یا رمزعبور نادرست است"
+	UserWithSpecificVariableFieldExists = "این %s توسط کاربر دیگری استفاده شده است"
 	SuccessLogin            = "شما با موفقیت وارد شدید"
 	SuccessCreateOperation  = "%s با موفقیت اضافه شد"
 	SuccessUpdateOperation  = "%s با موفقیت ویرایش شد"
@@ -18,4 +19,6 @@ const (
 	Role                    = "نقش"
 	VerificationCode        = "کد تایید"
 	Profile                 = "صفحه شخصی"
+	Phone = "شماره تلفن"
+	Username = "نام کاربری"
 )
