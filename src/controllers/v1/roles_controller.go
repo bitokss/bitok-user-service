@@ -42,8 +42,8 @@ func (r *rolesController) Create(c echo.Context) error {
 func (r *rolesController) FindAll(c echo.Context) error {
 	limit := 50
 	offset := 0
-	limitParam := c.Param("limit")
-	offsetParam := c.Param("offset")
+	limitParam := c.QueryParam("limit")
+	offsetParam := c.QueryParam("offset")
 	// check if param not sent, setting values of default
 	if limitParam != "" {
 		l, err := strconv.Atoi(limitParam)

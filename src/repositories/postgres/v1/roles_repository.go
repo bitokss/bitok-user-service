@@ -33,6 +33,13 @@ func (*rolesRepository) Create(role domains.Role) (domains.RoleResp, rest_respon
 }
 
 func (*rolesRepository) Update(role domains.Role) (domains.RoleResp, rest_response.RestResp) {
+	// clear all related permissions in order to overwrite them
+	if err := DB.Model(&role).Association("Permissions").Replace(&role.Permissions); err != nil {
+		if errors.Is(err , gorm.ErrRecordNotFound) {
+			return domains.RoleResp{}, rest_response.NewNotFoundError(fmt.Sprintf(constants.NotFoundErr, constants.Role), nil)
+		}
+	}
+	// update role and its permissions
 	if err := DB.Model(&role).Preload("Permissions").Where("id = ?", role.Model.ID).First(&domains.Role{}).Updates(&role).First(&role).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return domains.RoleResp{}, rest_response.NewNotFoundError(fmt.Sprintf(constants.NotFoundErr, constants.Role), nil)
