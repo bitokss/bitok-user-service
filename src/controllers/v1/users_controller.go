@@ -118,7 +118,16 @@ func (u *usersController) Delete(c echo.Context) error {
 }
 
 func (u *usersController) Register(c echo.Context) error {
-	panic("implement me")
+	user := new(domains.RegisterRequest)
+	err := utils.ValidateAndBind(c, user)
+	if err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	resp, err := services.UsersService.Register(*user)
+	if err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	return c.JSON(resp.Status(), resp)
 }
 
 func (u *usersController) Login(c echo.Context) error {

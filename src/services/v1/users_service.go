@@ -19,6 +19,7 @@ var (
 
 type usersServiceInterface interface {
 	Create(user domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp)
+	Register(user domains.RegisterRequest) (rest_response.RestResp, rest_response.RestResp)
 	FindAll(limit, offset int) (rest_response.RestResp, rest_response.RestResp)
 	Find(id int) (rest_response.RestResp, rest_response.RestResp)
 	Delete(id int) (rest_response.RestResp, rest_response.RestResp)
@@ -117,6 +118,21 @@ func (*usersService) Create(user domains.CreateUsersRequest) (rest_response.Rest
 	}
 	return rest_response.NewSuccessResponse(fmt.Sprintf(constants.SuccessCreateOperation, constants.User), p, http.StatusOK), nil
 }
+func (*usersService) Register(user domains.RegisterRequest) (rest_response.RestResp, rest_response.RestResp) {
+	code, err := repositories.CodesRepository.Find(user.Phone, "REGISTER")
+	if err != nil {
+		return nil, err
+	}
+	if !code.Used {
+		return nil, rest_response.NewBadRequestError(constants.BadRequestErr, nil)
+	}
+	u := userReqToDomain(user)
+	p, err := repositories.UsersRepository.Create(u)
+	if err != nil {
+		return nil, err
+	}
+	return rest_response.NewSuccessResponse(constants.SuccessRegisterOperation, p, http.StatusOK), nil
+}
 
 func userReqToDomain(u interface{}) domains.User {
 	switch user := u.(type) {
@@ -168,6 +184,22 @@ func userReqToDomain(u interface{}) domains.User {
 			Level:        level,
 			Password:     user.Password,
 			Roles:        roles,
+		}
+	case domains.RegisterRequest:
+		level := domains.Level{
+			Model: gorm.Model{
+				ID: 1,
+			},
+		}
+		return domains.User{
+			Phone:        user.Phone,
+			Username:     user.Username,
+			Email:        user.Email,
+			PersonnelNum: user.PersonnelNum,
+			FirstName:    user.FirstName,
+			LastName:     user.LastName,
+			Level:        level,
+			Password:     user.Password,
 		}
 	}
 	return domains.User{}

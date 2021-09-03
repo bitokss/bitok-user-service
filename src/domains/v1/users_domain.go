@@ -29,6 +29,16 @@ type CreateUsersRequest struct {
 	Roles        []uint `json:"roles"`
 }
 
+type RegisterRequest struct {
+	Phone        string `json:"phone" validate:"required"`
+	Username     string `json:"username" validate:"required"`
+	Email        string `json:"email" validate:"required,email"`
+	PersonnelNum int    `json:"personnel_num" validate:"required"`
+	FirstName    string `json:"first_name" validate:"required"`
+	LastName     string `json:"last_name" validate:"required"`
+	Password     string `json:"password" validate:"required"`
+}
+
 type UpdateUsersRequest struct {
 	Username     string `json:"username" validate:"required"`
 	Email        string `json:"email" validate:"required,email"`

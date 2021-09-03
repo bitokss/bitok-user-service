@@ -34,5 +34,16 @@ func (*codesController) Send(c echo.Context) error {
 }
 
 func (*codesController) Verify(c echo.Context) error {
-	panic("implement me")
+	body := new(domains.VerifyRequest)
+	if err := utils.ValidateAndBind(c, body); err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	if err := utils.IsValidCodeType(body.Type); err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	resp, err := services.CodesService.Verify(*body)
+	if err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	return c.JSON(resp.Status(), resp)
 }

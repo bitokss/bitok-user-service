@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+
 	"github.com/bitokss/bitok-user-service/constants"
 	"github.com/bitokss/bitok-user-service/controllers/v1"
 	"github.com/bitokss/bitok-user-service/middlewares/v1"
@@ -20,10 +21,10 @@ func urlMapper() {
 	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byToken/:token"), controllers.UsersController.FindByToken)
 	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byUsername/:username"), controllers.UsersController.FindByUsername, middlewares.OnlyWithPermissions([]string{constants.FindUsersPermission}))
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/resetPassword"), controllers.UsersController.ResetPassword)
-	e.POST(fmt.Sprintf(constants.V1Prefix, "users/tickRequest"), controllers.UsersController.TickRequest, middlewares.OnlyLogin)
+	// e.POST(fmt.Sprintf(constants.V1Prefix, "users/tickRequest"), controllers.UsersController.TickRequest, middlewares.OnlyLogin)
 	// profile
-	e.PUT(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.CreateOrUpdate, middlewares.OnlyLogin) // in service check that user who requested is the owner of this profile
-	e.GET(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.Find)
+	// e.PUT(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.CreateOrUpdate, middlewares.OnlyLogin) // in service check that user who requested is the owner of this profile
+	// e.GET(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.Find)
 	// codes
 	e.POST(fmt.Sprintf(constants.V1Prefix, "codes/send"), controllers.CodesController.Send)
 	e.POST(fmt.Sprintf(constants.V1Prefix, "codes/verify"), controllers.CodesController.Verify)
