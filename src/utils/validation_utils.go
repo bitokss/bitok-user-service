@@ -1,10 +1,11 @@
 package utils
 
 import (
+	"strconv"
+
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
 	"github.com/bitokss/bitok-user-service/constants"
 	"github.com/labstack/echo/v4"
-	"strconv"
 )
 
 func ValidateAndCastToInt(param string) (int, rest_response.RestResp) {
@@ -28,4 +29,12 @@ func ValidateAndBind(c echo.Context, i interface{}) rest_response.RestResp {
 		return rest_response.NewBadRequestError(constants.InvalidInputErr, nil)
 	}
 	return nil
+}
+
+func IsValidCodeType(t string) rest_response.RestResp {
+	switch t {
+	case "REGISTER", "FORGET_PASSWORD", "OTHER":
+		return nil
+	}
+	return rest_response.NewBadRequestError(constants.InvalidInputErr, nil)
 }

@@ -25,6 +25,7 @@ type usersRepositoryInterface interface {
 	FindAll(limit, offset int) ([]domains.UserResp, int64, rest_response.RestResp)
 	Find(id uint) (domains.UserResp, rest_response.RestResp)
 	Delete(id uint) rest_response.RestResp
+	FindByPhone(phone string) (domains.UserResp, rest_response.RestResp)
 }
 
 type usersRepository struct{}
@@ -172,4 +173,17 @@ func serializeUser(user domains.User) domains.UserResp {
 		Roles:        rolesResp,
 	}
 	return userResp
+}
+
+func (*usersRepository) FindByPhone(phone string) (domains.UserResp, rest_response.RestResp) {
+	var user domains.User
+	if err := DB.Preload("Roles").Preload("Roles.Permissions").Preload("Level").Where("phone = ?", phone).Find(&user).Error; err != nil {
+		fmt.Println(err)
+		return domains.UserResp{}, rest_response.NewInternalServerError(constants.InternalServerErr, nil)
+	}
+	if user.ID == 0 {
+		return domains.UserResp{}, rest_response.NewNotFoundError(fmt.Sprintf(constants.NotFoundErr, constants.User), nil)
+	}
+	userResp := serializeUser(user)
+	return userResp, nil
 }

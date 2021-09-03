@@ -488,12 +488,12 @@
               "FORGET_PASSWORD",
               "OTHER"
             ],
-            "in": "query",
+            "in": "body",
             "type": "string"
           },
           {
             "name": "phone",
-            "in": "query",
+            "in": "body",
             "type": "string"
           }
         ],
@@ -539,17 +539,17 @@
               "FORGET_PASSWORD",
               "OTHER"
             ],
-            "in": "query",
+            "in": "body",
             "type": "string"
           },
           {
             "name": "phone",
-            "in": "query",
+            "in": "body",
             "type": "string"
           },
           {
             "name": "code",
-            "in": "query",
+            "in": "body",
             "type": "integer"
           }
         ],

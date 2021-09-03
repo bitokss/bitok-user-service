@@ -1,6 +1,11 @@
 package controllers
 
-import "github.com/labstack/echo/v4"
+import (
+	"github.com/bitokss/bitok-user-service/domains/v1"
+	"github.com/bitokss/bitok-user-service/services/v1"
+	"github.com/bitokss/bitok-user-service/utils"
+	"github.com/labstack/echo/v4"
+)
 
 var (
 	CodesController codesControllerInterface = &codesController{}
@@ -13,10 +18,21 @@ type codesControllerInterface interface {
 
 type codesController struct{}
 
-func (c2 codesController) Send(c echo.Context) error {
-	panic("implement me")
+func (*codesController) Send(c echo.Context) error {
+	body := new(domains.CodeRequest)
+	if err := utils.ValidateAndBind(c, body); err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	if err := utils.IsValidCodeType(body.Type); err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	resp, err := services.CodesService.Send(*body)
+	if err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	return c.JSON(resp.Status(), resp)
 }
 
-func (c2 codesController) Verify(c echo.Context) error {
+func (*codesController) Verify(c echo.Context) error {
 	panic("implement me")
 }

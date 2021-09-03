@@ -34,6 +34,9 @@ func (v *Validator) Validate(i interface{}) error {
 // StartApp is function to Start application
 func StartApp(port string) {
 	e = echo.New()
+	if os.Getenv(constants.SmsServiceHost) == "" {
+		e.Logger.Fatalf("you should set %s enviroment variable", constants.SmsServiceHost)
+	}
 	// validate inputs using go-playground package
 	e.Validator = &Validator{validator: validator.New()}
 	urlMapper()
