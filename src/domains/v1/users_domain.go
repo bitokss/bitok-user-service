@@ -71,3 +71,8 @@ type LoginRequest struct {
 type TokenResp struct {
 	Token string `json:"token"`
 }
+
+type ResetPasswordRequest struct {
+	Phone string `json:"phone"`
+	NewPassword string `json:"new_password"`
+}

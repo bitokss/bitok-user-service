@@ -600,7 +600,7 @@
             "type": "string"
           },
           {
-            "name": "newPassword",
+            "name": "new_password",
             "in": "query",
             "type": "integer"
           }
@@ -630,14 +630,6 @@
             }
           }
         }
-      }
-    },
-    "/users/tickRequest/": {
-      "post": {
-        "tags": [
-          "users"
-        ],
-        "summary": "request for authentication in order to obtain colored tick"
       }
     },
     "/profile/{username}/": {

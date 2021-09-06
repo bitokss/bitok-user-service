@@ -79,6 +79,7 @@ func (*codesService) Verify(body domains.VerifyRequest) (rest_response.RestResp,
 		return nil, err
 	}
 	// check code is expired or not
+	// expiration time is hard coded as 5 minutes
 	if code.CreatedAt.Add(time.Minute*5).Sub(time.Now()) < 0 {
 		return nil, rest_response.NewBadRequestError(constants.CodeIsExpiredErr, nil)
 	}

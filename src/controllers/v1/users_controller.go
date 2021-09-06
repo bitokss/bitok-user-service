@@ -27,7 +27,6 @@ type usersControllerInterface interface {
 	FindByToken(c echo.Context) error
 	FindByUsername(c echo.Context) error
 	ResetPassword(c echo.Context) error
-	TickRequest(c echo.Context) error
 }
 
 type usersController struct{}
@@ -167,10 +166,16 @@ func (u *usersController) FindByUsername(c echo.Context) error {
 	return c.JSON(resp.Status(), resp)
 }
 
-func (u *usersController) ResetPassword(c echo.Context) error {
-	panic("implement me")
-}
 
-func (u *usersController) TickRequest(c echo.Context) error {
-	panic("implement me")
+func (u *usersController) ResetPassword(c echo.Context) error {
+	body := new(domains.ResetPasswordRequest)
+	err := utils.ValidateAndBind(c, body)
+	if err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	resp, err := services.UsersService.ResetPassword(*body)
+	if err != nil {
+		return c.JSON(err.Status(), err)
+	}
+	return c.JSON(resp.Status(), resp)
 }

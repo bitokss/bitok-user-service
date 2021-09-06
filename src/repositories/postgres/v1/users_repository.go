@@ -26,6 +26,7 @@ type usersRepositoryInterface interface {
 	Find(id uint) (domains.UserResp, rest_response.RestResp)
 	Delete(id uint) rest_response.RestResp
 	FindByPhone(phone string) (domains.UserResp, rest_response.RestResp)
+	UpdatePassword(phone , newPassword string) (domains.UserResp, rest_response.RestResp)
 }
 
 type usersRepository struct{}
@@ -148,6 +149,19 @@ func (*usersRepository) Delete(id uint) rest_response.RestResp {
 		return rest_response.NewInternalServerError(constants.InternalServerErr, nil)
 	}
 	return nil
+}
+
+func (*usersRepository) UpdatePassword(phone , newPassword string) (domains.UserResp, rest_response.RestResp) {
+	var user domains.User
+	newPassword = crypto.GenerateSha256(newPassword)
+	if err := DB.Model(&domains.User{}).Preload("Roles").Preload("Roles.Permissions").Preload("Level").Where("phone = ?", phone).First(&user).Update("password" , newPassword).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return domains.UserResp{}, rest_response.NewNotFoundError(fmt.Sprintf(constants.NotFoundErr, constants.User), nil)
+		}
+		return domains.UserResp{}, rest_response.NewInternalServerError(constants.InternalServerErr, nil)
+	}
+	rResp := serializeUser(user)
+	return rResp, nil
 }
 
 func serializeUser(user domains.User) domains.UserResp {

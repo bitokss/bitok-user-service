@@ -20,6 +20,7 @@ var (
 type usersServiceInterface interface {
 	Create(user domains.CreateUsersRequest) (rest_response.RestResp, rest_response.RestResp)
 	Register(user domains.RegisterRequest) (rest_response.RestResp, rest_response.RestResp)
+	ResetPassword(body domains.ResetPasswordRequest) (rest_response.RestResp, rest_response.RestResp)
 	FindAll(limit, offset int) (rest_response.RestResp, rest_response.RestResp)
 	Find(id int) (rest_response.RestResp, rest_response.RestResp)
 	Delete(id int) (rest_response.RestResp, rest_response.RestResp)
@@ -128,6 +129,21 @@ func (*usersService) Register(user domains.RegisterRequest) (rest_response.RestR
 	}
 	u := userReqToDomain(user)
 	p, err := repositories.UsersRepository.Create(u)
+	if err != nil {
+		return nil, err
+	}
+	return rest_response.NewSuccessResponse(constants.SuccessRegisterOperation, p, http.StatusOK), nil
+}
+
+func (*usersService) ResetPassword(body domains.ResetPasswordRequest) (rest_response.RestResp, rest_response.RestResp) {
+	code, err := repositories.CodesRepository.Find(body.Phone, "FORGET_PASSWORD")
+	if err != nil {
+		return nil, err
+	}
+	if !code.Used {
+		return nil, rest_response.NewBadRequestError(constants.BadRequestErr, nil)
+	}
+	p, err := repositories.UsersRepository.UpdatePassword(body.Phone , body.NewPassword)
 	if err != nil {
 		return nil, err
 	}
