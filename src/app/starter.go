@@ -1,6 +1,7 @@
 package app
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -43,7 +44,7 @@ func StartApp(port string) {
 	// initialize postgres and get db instance
 	db := repositories.PostgresInit()
 	// autoMigrate will automatically create tables using domains
-	err := db.AutoMigrate(&domains.Permission{}, &domains.Role{}, &domains.Level{}, &domains.User{}, &domains.Code{})
+	err := db.AutoMigrate(&domains.Permission{}, &domains.Role{}, &domains.Level{}, &domains.User{}, &domains.Code{}, &domains.Profile{})
 	if err != nil {
 		e.Logger.Error(err)
 	}
@@ -74,6 +75,9 @@ func addGod(db *gorm.DB) {
 		Permissions: constants.Permissions,
 	}
 	user := domains.User{
+		Model: gorm.Model{
+			ID: 1,
+		},
 		Phone:        phone,
 		Password:     crypto.GenerateSha256(password),
 		PersonnelNum: personnelNum,
@@ -86,5 +90,10 @@ func addGod(db *gorm.DB) {
 	}
 	if err := db.Where("phone = ?", user.Phone).FirstOrCreate(&user).Error; err != nil {
 		e.Logger.Error(err)
+	}
+	var profile domains.Profile
+	profile.UserID = user.Model.ID
+	if err := db.FirstOrCreate(&profile).Error; err != nil {
+		fmt.Println(err)
 	}
 }

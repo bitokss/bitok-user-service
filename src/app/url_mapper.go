@@ -10,6 +10,7 @@ import (
 
 func urlMapper() {
 	// users
+	//return user
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UsersController.Create, middlewares.OnlyWithPermissions([]string{constants.AddUsersPermission}))
 	e.GET(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UsersController.FindAll, middlewares.OnlyWithPermissions([]string{constants.FindAllUsersPermission}))
 	e.DELETE(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UsersController.Delete, middlewares.OnlyWithPermissions([]string{constants.DeleteUsersPermission}))
@@ -19,11 +20,11 @@ func urlMapper() {
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/register"), controllers.UsersController.Register)
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/login"), controllers.UsersController.Login)
 	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byToken/:token"), controllers.UsersController.FindByToken)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byUsername/:username"), controllers.UsersController.FindByUsername, middlewares.OnlyWithPermissions([]string{constants.FindUsersPermission}))
+	e.GET(fmt.Sprintf(constants.V1Prefix, "users/byUsername/:username"), controllers.UsersController.FindByUsername)
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users/resetPassword"), controllers.UsersController.ResetPassword)
 	// profile
-	e.PUT(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.CreateOrUpdate, middlewares.OnlyLogin)
-	e.GET(fmt.Sprintf(constants.V1Prefix, "profile/:username"), controllers.ProfileController.Find)
+	e.PUT(fmt.Sprintf(constants.V1Prefix, "profile/:user_id"), controllers.ProfileController.Update, middlewares.OnlyOwner)
+	e.GET(fmt.Sprintf(constants.V1Prefix, "profile/:user_id"), controllers.ProfileController.Find)
 	// codes
 	e.POST(fmt.Sprintf(constants.V1Prefix, "codes/send"), controllers.CodesController.Send)
 	e.POST(fmt.Sprintf(constants.V1Prefix, "codes/verify"), controllers.CodesController.Verify)

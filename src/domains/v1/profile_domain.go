@@ -2,17 +2,21 @@ package domains
 
 import "gorm.io/gorm"
 
-type Profile struct {
-	gorm.Model
+type (
+	Profile struct {
+		gorm.Model
+		Summery string `gorm:"column:summery;type:text"`
+		UserID  uint   `gorm:"column:user_id;index"`
+		User    User   `gorm:"foreignKey:UserID"`
+	}
 
-	UserID uint `gorm:"column:user_id"`
-	User   User `gorm:"foreignKey:UserID"`
-}
+	ProfileRequest struct {
+		Summery string `json:"summery" validate:"required"`
+	}
 
-type ProfileRequest struct {
-	
-}
-
-type ProfileResp struct {
-
-}
+	ProfileResp struct {
+		ID      uint   `json:"id"`
+		Summery string `json:"summery"`
+		UserID  uint   `json:"user_id"`
+	}
+)

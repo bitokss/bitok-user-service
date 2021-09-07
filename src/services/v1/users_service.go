@@ -143,7 +143,7 @@ func (*usersService) ResetPassword(body domains.ResetPasswordRequest) (rest_resp
 	if !code.Used {
 		return nil, rest_response.NewBadRequestError(constants.BadRequestErr, nil)
 	}
-	p, err := repositories.UsersRepository.UpdatePassword(body.Phone , body.NewPassword)
+	p, err := repositories.UsersRepository.UpdatePassword(body.Phone, body.NewPassword)
 	if err != nil {
 		return nil, err
 	}

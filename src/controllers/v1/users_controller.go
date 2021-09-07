@@ -166,7 +166,6 @@ func (u *usersController) FindByUsername(c echo.Context) error {
 	return c.JSON(resp.Status(), resp)
 }
 
-
 func (u *usersController) ResetPassword(c echo.Context) error {
 	body := new(domains.ResetPasswordRequest)
 	err := utils.ValidateAndBind(c, body)

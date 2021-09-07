@@ -26,7 +26,7 @@ type usersRepositoryInterface interface {
 	Find(id uint) (domains.UserResp, rest_response.RestResp)
 	Delete(id uint) rest_response.RestResp
 	FindByPhone(phone string) (domains.UserResp, rest_response.RestResp)
-	UpdatePassword(phone , newPassword string) (domains.UserResp, rest_response.RestResp)
+	UpdatePassword(phone, newPassword string) (domains.UserResp, rest_response.RestResp)
 }
 
 type usersRepository struct{}
@@ -80,6 +80,12 @@ func (*usersRepository) Create(user domains.User) (domains.UserResp, rest_respon
 		if strings.Contains(err.Error(), "username") {
 			return domains.UserResp{}, rest_response.NewBadRequestError(fmt.Sprintf(constants.UserWithSpecificVariableFieldExists, constants.Username), nil)
 		}
+		return domains.UserResp{}, rest_response.NewInternalServerError(constants.InternalServerErr, nil)
+	}
+	var profile domains.Profile
+	profile.UserID = user.Model.ID
+	if err := DB.Create(&profile).Error; err != nil {
+		fmt.Println(err)
 		return domains.UserResp{}, rest_response.NewInternalServerError(constants.InternalServerErr, nil)
 	}
 	rResp := serializeUser(user)
@@ -151,10 +157,10 @@ func (*usersRepository) Delete(id uint) rest_response.RestResp {
 	return nil
 }
 
-func (*usersRepository) UpdatePassword(phone , newPassword string) (domains.UserResp, rest_response.RestResp) {
+func (*usersRepository) UpdatePassword(phone, newPassword string) (domains.UserResp, rest_response.RestResp) {
 	var user domains.User
 	newPassword = crypto.GenerateSha256(newPassword)
-	if err := DB.Model(&domains.User{}).Preload("Roles").Preload("Roles.Permissions").Preload("Level").Where("phone = ?", phone).First(&user).Update("password" , newPassword).First(&user).Error; err != nil {
+	if err := DB.Model(&domains.User{}).Preload("Roles").Preload("Roles.Permissions").Preload("Level").Where("phone = ?", phone).First(&user).Update("password", newPassword).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return domains.UserResp{}, rest_response.NewNotFoundError(fmt.Sprintf(constants.NotFoundErr, constants.User), nil)
 		}
