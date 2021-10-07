@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
-	"github.com/bitokss/bitok-user-service/constants"
-	"github.com/bitokss/bitok-user-service/domains/v1"
-	repositories "github.com/bitokss/bitok-user-service/repositories/postgres/v1"
+	"github.com/bitokss/bitok-user-service/src/constants"
+	"github.com/bitokss/bitok-user-service/src/domains/v1"
+	"github.com/bitokss/bitok-user-service/src/repo/postgres/v1"
 	"gorm.io/gorm"
 )
 
@@ -33,7 +33,7 @@ func (*permissionsService) Update(pid uint, permission domains.CreatePermissions
 			ID: pid,
 		},
 	}
-	p, err := repositories.PermissionsRepository.Update(pd)
+	p, err := repo.PermissionsRepository.Update(pd)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (*permissionsService) Update(pid uint, permission domains.CreatePermissions
 }
 
 func (*permissionsService) Find(pid int) (rest_response.RestResp, rest_response.RestResp) {
-	p, err := repositories.PermissionsRepository.Find(uint(pid))
+	p, err := repo.PermissionsRepository.Find(uint(pid))
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (*permissionsService) Find(pid int) (rest_response.RestResp, rest_response.
 }
 
 func (*permissionsService) Delete(pid int) (rest_response.RestResp, rest_response.RestResp) {
-	err := repositories.PermissionsRepository.Delete(uint(pid))
+	err := repo.PermissionsRepository.Delete(uint(pid))
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (*permissionsService) Delete(pid int) (rest_response.RestResp, rest_respons
 }
 
 func (*permissionsService) FindAll(limit, offset int) (rest_response.RestResp, rest_response.RestResp) {
-	p, c, err := repositories.PermissionsRepository.FindAll(limit, offset)
+	p, c, err := repo.PermissionsRepository.FindAll(limit, offset)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (*permissionsService) Create(permission domains.CreatePermissionsRequest) (
 		Symbol: permission.Symbol,
 		Model:  gorm.Model{},
 	}
-	p, err := repositories.PermissionsRepository.Create(pd)
+	p, err := repo.PermissionsRepository.Create(pd)
 	if err != nil {
 		return nil, err
 	}

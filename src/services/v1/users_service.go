@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
-	"github.com/bitokss/bitok-user-service/constants"
-	"github.com/bitokss/bitok-user-service/domains/v1"
-	repositories "github.com/bitokss/bitok-user-service/repositories/postgres/v1"
+	"github.com/bitokss/bitok-user-service/src/constants"
+	"github.com/bitokss/bitok-user-service/src/domains/v1"
+	repositories "github.com/bitokss/bitok-user-service/src/repo/postgres/v1"
 	"github.com/golang-jwt/jwt"
 	"gorm.io/gorm"
 )

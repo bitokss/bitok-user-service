@@ -7,9 +7,10 @@ import (
 	"strconv"
 
 	"github.com/alidevjimmy/go-rest-utils/crypto"
-	"github.com/bitokss/bitok-user-service/constants"
-	"github.com/bitokss/bitok-user-service/domains/v1"
-	repositories "github.com/bitokss/bitok-user-service/repositories/postgres/v1"
+	"github.com/bitokss/bitok-user-service/src/constants"
+	"github.com/bitokss/bitok-user-service/src/domains/v1"
+
+	"github.com/bitokss/bitok-user-service/src/repo/postgres/v1"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
@@ -35,14 +36,11 @@ func (v *Validator) Validate(i interface{}) error {
 // StartApp is function to Start application
 func StartApp(port string) {
 	e = echo.New()
-	if os.Getenv(constants.SmsServiceHost) == "" {
-		e.Logger.Fatalf("you should set %s enviroment variable", constants.SmsServiceHost)
-	}
 	// validate inputs using go-playground package
 	e.Validator = &Validator{validator: validator.New()}
 	urlMapper()
 	// initialize postgres and get db instance
-	db := repositories.PostgresInit()
+	db := repo.PostgresInit()
 	// autoMigrate will automatically create tables using domains
 	err := db.AutoMigrate(&domains.Permission{}, &domains.Role{}, &domains.Level{}, &domains.User{}, &domains.Code{}, &domains.Profile{})
 	if err != nil {

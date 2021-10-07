@@ -2,8 +2,8 @@ package middlewares
 
 import (
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
-	"github.com/bitokss/bitok-user-service/constants"
-	"github.com/bitokss/bitok-user-service/services/v1"
+	"github.com/bitokss/bitok-user-service/src/constants"
+	"github.com/bitokss/bitok-user-service/src/services/v1"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"strings"

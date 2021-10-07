@@ -3,14 +3,15 @@ package app
 import (
 	"fmt"
 
-	"github.com/bitokss/bitok-user-service/constants"
-	"github.com/bitokss/bitok-user-service/controllers/v1"
-	"github.com/bitokss/bitok-user-service/middlewares/v1"
+	"github.com/bitokss/bitok-user-service/src/constants"
+	"github.com/bitokss/bitok-user-service/src/controllers/v1"
+	"github.com/bitokss/bitok-user-service/src/middlewares/v1"
 )
 
 func urlMapper() {
 	// users
 	//return user
+	// make them group
 	e.POST(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UsersController.Create, middlewares.OnlyWithPermissions([]string{constants.AddUsersPermission}))
 	e.GET(fmt.Sprintf(constants.V1Prefix, "users"), controllers.UsersController.FindAll, middlewares.OnlyWithPermissions([]string{constants.FindAllUsersPermission}))
 	e.DELETE(fmt.Sprintf(constants.V1Prefix, "users/:id"), controllers.UsersController.Delete, middlewares.OnlyWithPermissions([]string{constants.DeleteUsersPermission}))

@@ -1,6 +1,6 @@
 package constants
 
-import "github.com/bitokss/bitok-user-service/domains/v1"
+import "github.com/bitokss/bitok-user-service/src/domains/v1"
 
 const (
 	// users

@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
-	"github.com/bitokss/bitok-user-service/constants"
-	"github.com/bitokss/bitok-user-service/domains/v1"
-	"github.com/bitokss/bitok-user-service/services/v1"
-	"github.com/bitokss/bitok-user-service/utils"
+	"github.com/bitokss/bitok-user-service/src/constants"
+	"github.com/bitokss/bitok-user-service/src/domains/v1"
+	"github.com/bitokss/bitok-user-service/src/services/v1"
+	"github.com/bitokss/bitok-user-service/src/utils"
 	"github.com/labstack/echo/v4"
 )
 

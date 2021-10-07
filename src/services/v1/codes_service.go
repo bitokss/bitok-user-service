@@ -12,9 +12,9 @@ import (
 	"time"
 
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
-	"github.com/bitokss/bitok-user-service/constants"
-	"github.com/bitokss/bitok-user-service/domains/v1"
-	repositories "github.com/bitokss/bitok-user-service/repositories/postgres/v1"
+	"github.com/bitokss/bitok-user-service/src/constants"
+	"github.com/bitokss/bitok-user-service/src/domains/v1"
+	"github.com/bitokss/bitok-user-service/src/repo/postgres/v1"
 	"github.com/labstack/echo/v4"
 )
 
@@ -30,14 +30,14 @@ type codesServiceInterface interface {
 type codesService struct{}
 
 func (*codesService) Send(code domains.CodeRequest) (rest_response.RestResp, rest_response.RestResp) {
-	user, err := repositories.UsersRepository.FindByPhone(code.Phone)
+	user, err := repo.UsersRepository.FindByPhone(code.Phone)
 	if user.ID != 0 {
 		return nil, rest_response.NewBadRequestError(constants.UserExistsErr, nil)
 	}
 	if err.Status() != http.StatusNotFound {
 		return nil, err
 	}
-	c, err := repositories.CodesRepository.Find(code.Phone, code.Type)
+	c, err := repo.CodesRepository.Find(code.Phone, code.Type)
 	if c.Model.ID != 0 {
 		if c.CreatedAt.Add(time.Minute*2).Sub(time.Now()) > 0 {
 			return nil, rest_response.NewBadRequestError(fmt.Sprintln(constants.WaitingMinutesErr, 2), nil)
@@ -66,7 +66,7 @@ func (*codesService) Send(code domains.CodeRequest) (rest_response.RestResp, res
 		fmt.Println(string(bodyBytes))
 		return nil, rest_response.NewInternalServerError(constants.InternalServerErr, nil)
 	}
-	c, err = repositories.CodesRepository.Create(code.Phone, code.Type, verifyCode)
+	c, err = repo.CodesRepository.Create(code.Phone, code.Type, verifyCode)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func (*codesService) Send(code domains.CodeRequest) (rest_response.RestResp, res
 }
 
 func (*codesService) Verify(body domains.VerifyRequest) (rest_response.RestResp, rest_response.RestResp) {
-	code, err := repositories.CodesRepository.FindByCode(body.Phone, body.Type, body.Code)
+	code, err := repo.CodesRepository.FindByCode(body.Phone, body.Type, body.Code)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (*codesService) Verify(body domains.VerifyRequest) (rest_response.RestResp,
 		return nil, rest_response.NewBadRequestError(constants.CodeIsExpiredErr, nil)
 	}
 	// update code and set used as true
-	if _, err := repositories.CodesRepository.Update(body.Phone, body.Type, body.Code); err != nil {
+	if _, err := repo.CodesRepository.Update(body.Phone, body.Type, body.Code); err != nil {
 		return nil, err
 	}
 	return rest_response.NewSuccessResponse(constants.SuccessSendCodeOperation, nil, http.StatusOK), nil

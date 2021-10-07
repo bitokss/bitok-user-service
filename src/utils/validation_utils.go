@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/alidevjimmy/go-rest-utils/rest_response"
-	"github.com/bitokss/bitok-user-service/constants"
+	"github.com/bitokss/bitok-user-service/src/constants"
 	"github.com/labstack/echo/v4"
 )
 

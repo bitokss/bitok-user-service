@@ -1,13 +1,13 @@
 FROM golang:1.16.5-buster AS builder
 
-ENV REPO_URL=github.com/alidevjimmy/bitok-user-service
-ENV GOPATH=/app
-ENV APP_PATH=$GOPATH/src/$REPO_URL
-WORKDIR $APP_PATH/src
-ADD src .
+WORKDIR /app
+ADD . .
 RUN mkdir /out
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /out/main .
+RUN go build -o /out/main src/main.go
 
 FROM scratch
-COPY --from=builder /out/main /
-CMD ["/main"]
+WORKDIR /
+COPY --from=build /out/main /main
+EXPOSE 8080
+USER nonroot:nonroot
+ENTRYPOINT ["/main"]
